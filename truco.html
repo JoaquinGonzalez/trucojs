@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Truco</title>
+        <link rel="stylesheet" href="truco.css">
+        <script src="jquery-3.6.0.min.js"></script>
+        <script src="truco.js"></script>
+    </head>
+    <body>
+        <div id="game">
+            <canvas id="score"></canvas>
+            <div id="table">
+                <div id="table-top"></div>
+                <div id="stack-deck">
+                    <div class="card card-default"></div>
+                    <div class="card card card-default" style="margin-left:3px;margin-top:3px;"></div>
+                    <div class="card card card-default" style="margin-left:6px;margin-top:6px;"></div>
+                </div>
+                <div id="opponent-deck" class="deck">
+                    <div class="card card-default co3"></div>
+                    <div class="card card-default co2"></div>
+                    <div class="card card-default co1"></div>
+                </div>
+                <div id="table-deck" class="deck">
+                    <div class="card card-cup card-4 to1"></div>
+                    <div class="card card-sword card-5 t2"></div>
+                    <div class="card card-sword card-2 t3"></div>
+                    <div class="card card-stick card-3 to4"></div>
+                    <div class="card card-gold card-7 t5"></div>
+                    <div class="card card-sword card-1 to6"></div>
+                </div>
+                <div id="player-deck" class="deck">
+                    <div class="card card-default c1"></div>
+                    <div class="card card-default c2"></div>
+                    <div class="card card-default c3"></div>
+                </div>
+            </div>
+            <div id="buttons">
+                <div>
+                    <button>Truco</button>
+                    <button>Quiero Re Truco</button>
+                    <button>Quiero Vale 4</button>
+                </div>
+                <button class="button-w">Quiero</button>
+                <button class="button-dw">No Quiero</button>
+                <button>Envido</button>
+                <button>Real Envido</button>
+                <button>Falta Envido</button>
+            </div>
+        </div>
+    </body>
+    <script>
+        var game = new Truco;
+        game.start();
+    </script>
+</html>

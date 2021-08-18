@@ -1,0 +1,267 @@
+html, body, button, div {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: brown;
+}
+
+.card {
+    background: url('cards.png') 100%;
+    width: 100px;
+    height: 200px;
+    background-size: 1200% 500%;
+    background-repeat: no-repeat;
+    background-position-x: 0px;
+    background-position-y: 0px;
+}
+
+.card-default {
+    background-position-x: -100px;
+    background-position-y: -800px;
+}
+
+.card-gold {
+    background-position-y: 0px;
+}
+
+.card-cup {
+    background-position-y: -200px;
+}
+
+.card-sword {
+    background-position-y: -400px;
+}
+
+.card-stick {
+    background-position-y: -600px;
+}
+
+.card-1 {
+    background-position-x: 0px;
+}
+
+.card-2 {
+    background-position-x: -100px;
+}
+
+.card-3 {
+    background-position-x: -200px;
+}
+
+.card-4 {
+    background-position-x: -300px;
+}
+
+.card-5 {
+    background-position-x: -400px;
+}
+
+.card-6 {
+    background-position-x: -500px;
+}
+
+.card-7 {
+    background-position-x: -600px;
+}
+
+.card-8 {
+    background-position-x: -700px;
+}
+
+.card-9 {
+    background-position-x: -800px;
+}
+
+.card-10 {
+    background-position-x: -900px;
+}
+
+.card-11 {
+    background-position-x: -1000px;
+}
+
+.card-12 {
+    background-position-x: -1100px;
+}
+
+#stack-deck {
+    width: 110px;
+    position: fixed;
+    height: 210px;
+    margin-top: 220px;
+    margin-left: 50px;
+}
+
+#stack-deck .card {
+    position: fixed;
+}
+
+.deck {
+    position: fixed;
+    width: 310px;
+    height: 200px;
+}
+
+.deck .card {
+    display: inline-block;
+}
+
+.deck .co1 {
+    transform: rotate(-10deg) translate(-20px, -10px);
+}
+
+.deck .co2 {
+    transform: translate(1px);
+}
+
+.deck .co3 {
+    transform: rotate(10deg) translate(20px, -10px);
+}
+
+.deck .c1 {
+    transform: rotate(-10deg) translate(20px, 10px);
+}
+
+.deck .c2 {
+    transform: translate(1px);
+}
+
+.deck .c3 {
+    transform: rotate(10deg) translate(-20px, 10px);
+}
+
+#player-deck {
+    margin-left: 360px;
+    margin-top: 500px;
+}
+
+#player-deck .card:hover {
+    border: solid 1px red;
+    border-radius: 15px;
+}
+
+#opponent-deck {
+    margin-left: 360px;
+}
+
+#table-deck {
+    width: 620px;
+    margin-left: 270px;
+    margin-top: 250px;
+}
+
+#table-deck .t1 {
+    transform: translate(40px, 21px) rotate(-3deg);
+}
+
+#table-deck .t2 {
+    transform: translate(-20px, 23px) rotate(7deg);
+}
+
+#table-deck .t3 {
+    transform: translate(-60px, 22px) rotate(-4deg);
+}
+
+#table-deck .t4 {
+    transform: translate(-100px, 24px) rotate(9deg);
+}
+
+#table-deck .t5 {
+    transform: translate(-140px, 26px) rotate(-6deg);
+}
+
+#table-deck .t6 {
+    transform: translate(-180px, 25px) rotate(8deg);
+}
+
+#table-deck .to1 {
+    transform: translate(40px, -21px) rotate(-3deg);
+}
+
+#table-deck .to2 {
+    transform: translate(-20px, -23px) rotate(7deg);
+}
+
+#table-deck .to3 {
+    transform: translate(-60px, -22px) rotate(-4deg);
+}
+
+#table-deck .to4 {
+    transform: translate(-100px, -24px) rotate(9deg);
+}
+
+#table-deck .to5 {
+    transform: translate(-140px, -26px) rotate(-6deg);
+}
+
+#table-deck .to6 {
+    transform: translate(-180px, -25px) rotate(8deg);
+}
+
+#game {
+    margin: 0 auto;
+}
+
+#score {
+    position: fixed;
+    width: 200px;
+    height: 500px;
+    background-color: black;
+    margin-top: 100px;
+    margin-left: 800px;
+    opacity: 0.8;
+}
+
+#game {
+    width: 1024px;
+    height: 768px;
+}
+
+#table {
+    width: 1024px;
+    height: 663px;
+}
+
+#table-top {
+    width: 1024px;
+    height: 663px;
+    border: solid 6px darkolivegreen;
+    border-radius: 100%;
+    background-color: green;
+    position: fixed;
+    z-index: -99;
+}
+
+#buttons {
+    width: 520px;
+    height: 105px;
+    border: solid 1px black;
+    margin-left: 25px !important;
+    padding: 5px;
+    border-radius: 6px;
+}
+
+#buttons div {
+    margin-bottom: 5px;
+}
+
+#buttons button {
+    width: 100px;
+    height: 50px;
+    font-weight: bold;
+    border: solid 1px black;
+    background-color: yellow;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+#buttons .button-w {
+    background-color: green;
+    color: white;
+}
+
+#buttons .button-dw {
+    background-color: red;
+}
