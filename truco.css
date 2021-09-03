@@ -9,8 +9,8 @@ body {
 
 .card {
     background: url('cards.png') 100%;
-    width: 100px;
-    height: 200px;
+    width: 80px;
+    height: 150px;
     background-size: 1200% 500%;
     background-repeat: no-repeat;
     background-position-x: 0px;
@@ -18,8 +18,8 @@ body {
 }
 
 .card-default {
-    background-position-x: -100px;
-    background-position-y: -800px;
+    background-position-x: -80px;
+    background-position-y: -600px;
 }
 
 .card-gold {
@@ -27,15 +27,15 @@ body {
 }
 
 .card-cup {
-    background-position-y: -200px;
+    background-position-y: -150px;
 }
 
 .card-sword {
-    background-position-y: -400px;
+    background-position-y: -300px;
 }
 
 .card-stick {
-    background-position-y: -600px;
+    background-position-y: -450px;
 }
 
 .card-1 {
@@ -43,54 +43,54 @@ body {
 }
 
 .card-2 {
-    background-position-x: -100px;
+    background-position-x: -80px;
 }
 
 .card-3 {
-    background-position-x: -200px;
+    background-position-x: -160px;
 }
 
 .card-4 {
-    background-position-x: -300px;
+    background-position-x: -240px;
 }
 
 .card-5 {
-    background-position-x: -400px;
+    background-position-x: -320px;
 }
 
 .card-6 {
-    background-position-x: -500px;
+    background-position-x: -400px;
 }
 
 .card-7 {
-    background-position-x: -600px;
+    background-position-x: -480px;
 }
 
 .card-8 {
-    background-position-x: -700px;
+    background-position-x: -560px;
 }
 
 .card-9 {
-    background-position-x: -800px;
+    background-position-x: -640px;
 }
 
 .card-10 {
-    background-position-x: -900px;
+    background-position-x: -720px;
 }
 
 .card-11 {
-    background-position-x: -1000px;
+    background-position-x: -800px;
 }
 
 .card-12 {
-    background-position-x: -1100px;
+    background-position-x: -880px;
 }
 
 #stack-deck {
-    width: 110px;
+    width: 70px;
     position: fixed;
-    height: 210px;
-    margin-top: 220px;
+    height: 160px;
+    margin-top: 180px;
     margin-left: 50px;
 }
 
@@ -100,7 +100,7 @@ body {
 
 .deck {
     position: fixed;
-    width: 310px;
+    width: 270px;
     height: 200px;
 }
 
@@ -133,23 +133,23 @@ body {
 }
 
 #player-deck {
-    margin-left: 360px;
-    margin-top: 500px;
+    margin-left: 300px;
+    margin-top: 360px;
 }
 
 #player-deck .card:hover {
     border: solid 1px red;
-    border-radius: 15px;
+    border-radius: 6px;
 }
 
 #opponent-deck {
-    margin-left: 360px;
+    margin-left: 300px;
 }
 
 #table-deck {
-    width: 620px;
-    margin-left: 270px;
-    margin-top: 250px;
+    width: 570px;
+    margin-left: 250px;
+    margin-top: 180px;
 }
 
 #table-deck .t1 {
@@ -206,27 +206,27 @@ body {
 
 #score {
     position: fixed;
-    width: 200px;
-    height: 500px;
+    width: 150px;
+    height: 350px;
     background-color: black;
     margin-top: 100px;
-    margin-left: 800px;
+    margin-left: 750px;
     opacity: 0.8;
 }
 
 #game {
-    width: 1024px;
-    height: 768px;
+    width: 800px;
+    height: 600px;
 }
 
 #table {
-    width: 1024px;
-    height: 663px;
+    width: 800px;
+    height: 500px;
 }
 
 #table-top {
-    width: 1024px;
-    height: 663px;
+    width: 800px;
+    height: 495px;
     border: solid 6px darkolivegreen;
     border-radius: 100%;
     background-color: green;
