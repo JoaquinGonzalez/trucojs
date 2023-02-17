@@ -1,5 +1,5 @@
 Math.randomRange = (min, max) => {
-    return (Math.random() * (max - min + 1)) + min;
+    return Math.floor((Math.random() * (max - min + 1)) + min);
 };
 
 Math.randomInt = (min, max) => {
@@ -15,156 +15,130 @@ Object.count = (o) => {
 };
 
 var CardType = {
-    Default: 'default',
-    Gold: 'gold',
-    Cup: 'cup',
-    Sword: 'sword',
-    Stick: 'stick',
+    DEFAULT: 0,
+    GOLD: 1,
+    CUP: 2,
+    SWORD: 3,
+    STICK: 4,
 };
 
-class CardDeck {
-
-    constructor() {
-        this.stack = [];
-    }
-
-    fill() {
-        for (let x = 1; x < Object.count(CardType); x++)
-            for (let y = 1; y < 13; y++)
-                if (y !== 8 || y !== 9)
-                    this.push(new Card(Object.at(CardType, x), y));
-    }
-
-    push(card) {
-        this.stack.push(card);
-    }
-
-    popRandom() {
-        return this.stack.splice(Math.randomInt(0, this.stack.length), 1)[0];
-    }
-
-    calcEnvido() {
-    }
-
-    shuffle(times) {
-        let newDeck = [];
-        let lastEnd = 0;
-
-        while (this.stack.length < newDeck.length) {
-            let cut = ((this.stack.length - 1) - lastEnd >= 10
-                ? (this.stack.length - 1)
-                : Math.randomInt(lastEnd, lastEnd + randomInt(2, 10)));
-            newDeck.concat(this.stack.slice(lastEnd, cut).reverse());
-            lastEnd = cut;
-        }
-
-        this.stack = newDeck.reverse();
-
-        if (--times > 0) this.shuffle(times);
-    }
-
-    clear() {
-        this.stack = [];
-    }
-}
+var UIElements = {
+    TABLE_DECK: null,
+    PLAYER_DECK: null,
+    OPPONENT_DECK: null,
+    SCORE: null
+};
 
 class Card {
 
     constructor(type, number) {
-        this.type = type || CardType.Default;
+        this.type = type || CardType.DEFAULT;
         this.number = number || 0;
     }
 }
 
-class Score {
+var ctx = undefined;
+var maindeck = [];
+var opponentdeck = [];
+var playerdeck = [];
 
-    constructor() {
-        this.canvas = document.getElementById('score');
-        this.ctx = this.canvas.getContext('2d');
-        this.width = this.canvas.width;
-        this.height = this.canvas.height;
-        this.ctx.font = '28px serif';
-    }
-
-    draw() {
-        this.ctx.fillStyle = 'white';
-        this.ctx.strokeStyle = 'white';
-        this.ctx.fillText('Jugador', 20, 20);
-        this.ctx.fillText('Oponente', this.width - 120, 20);
-        this.ctx.fillRect(this.width / 2 - 2, 5, 2, this.height - 10);
-        this.ctx.fillRect(20, 22, this.width - 30, 1);
-    }
+function cleardeck(deck) {
+    if (deck.pop() !== undefined) cleardeck(deck);
 }
 
-class UI {
-
-    constructor() {
-        this.table = $('#table');
-        this.opponentDeck = $('#opponent-deck');
-        this.tableDeck = $('#table-deck');
-        this.playerDeck = $('#player-deck');
-    }
-
-    clearTable() {
-        this.opponentDeck.empty();
-        this.tableDeck.empty();
-        this.playerDeck.empty();
-    }
+function filldeck(deck) {
+    for (let x = 1; x < Object.count(CardType); x++)
+        for (let y = 1; y < 13; y++)
+            if (y !== 8 && y !== 9)
+                deck.push(new Card(Object.at(CardType, x), y));
 }
 
-class Truco {
-
-    constructor() {
-        this.score = new Score;
-        this.ui = new UI;
-        this.mainDeck = new CardDeck;
-        this.opponentDeck = new CardDeck;
-        this.playerDeck = new CardDeck;
-    }
-
-    clearAllDecks() {
-        this.mainDeck.clear();
-        this.opponentDeck.clear();
-        this.playerDeck.clear();
-    }
-
-    allowPlayerToPlay() {
-    }
-
-    playHand() {
-        this.clearAllDecks();
-        this.ui.clearTable();
-
-        this.mainDeck.fill();
-        //this.mainDeck.shuffle();
-
-        for (let i = 0; i < 3; i++)
-            this.opponentDeck.push(this.mainDeck.popRandom());
-
-        for (let i = 0; i < 3; i++)
-            this.playerDeck.push(this.mainDeck.popRandom());
-
-        switch (this.handPlayBy) {
-            case 'player':
-                this.allowPlayerToPlay();
-                break;
-            case 'opponent':
-                this.playPC();
-                break;
+function shuffledeck(deck) {
+    for (let i = 0; i < deck.length; i++) {
+        if (i < deck.length - 2) {
+            let ri = Math.randomRange(i + 1, deck.length - 1);
+            let c = deck[ri];
+            let lc = deck[i];
+            deck[i] = c;
+            deck[ri] = lc;
         }
-
-        this.score.draw();
-    }
-
-    start() {
-        this.playHand();
     }
 }
 
-function testCardDeck() {
-    let c = new CardDeck;
-    c.fill();
-    console.log(c.stack);
-    c.shuffle();
-    console.log(c.stack);
+function initscore() {
+    ctx = UIElements.SCORE.getContext('2d');
+}
+
+function emptyalluideck() {
+    for (let i = 0; i < Object.count(UIElements); i++) {
+        let ele = Object.at(UIElements, i);
+        while (ele.firstChild) {
+            ele.removeChild(ele.lastChild);
+        }
+    }
+}
+
+function createcardele(card) {
+    let ele = document.createElement('div');
+
+    switch (card.type) {
+        case CardType.DEFAULT:
+            ele.setAttribute('class', 'card card-default');
+            break;
+    }
+
+    return ele;
+}
+
+function addcardui(ele, card) {
+    ele.append(card);
+}
+
+function updateui() {
+    for (let i = 0; i < playerdeck.length; i++) {
+        let c = createcardele(new Card());
+        c.setAttribute('class', c.getAttribute('class') + ' c' + (i + 1));
+        addcardui(UIElements.PLAYER_DECK, c);
+    }
+
+    for (let i = 0; i < opponentdeck.length; i++) {
+        let c = createcardele(new Card());
+        c.setAttribute('class', c.getAttribute('class') + ' c' + (i + 1));
+        addcardui(UIElements.OPPONENT_DECK, c);
+    }
+}
+
+function initui() {
+    UIElements.TABLE_DECK = document.getElementById("table-deck");
+    UIElements.PLAYER_DECK = document.getElementById("player-deck");
+    UIElements.OPPONENT_DECK = document.getElementById("opponent-deck");
+    UIElements.SCORE = document.getElementById("score");
+}
+
+function splitdeck() {
+    for (let i = 0; i < 3; i++) {
+        playerdeck.push(maindeck.pop());
+        opponentdeck.push(maindeck.pop());
+    }
+}
+
+function clearalldecks() {
+    cleardeck(maindeck);
+    cleardeck(opponentdeck);
+    cleardeck(playerdeck);
+}
+
+function playhand() {
+    splitdeck();
+    updateui();
+}
+
+function startgame() {
+    initui();
+    initscore();
+    emptyalluideck();
+    clearalldecks();
+    filldeck(maindeck);
+    shuffledeck(maindeck);
+    playhand();
 }
