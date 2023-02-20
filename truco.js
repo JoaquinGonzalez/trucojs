@@ -124,6 +124,51 @@ var game = {
                 }
             }
         },
+        cmp: function(c1, c2) {
+            let order = [
+                {n: 1, t: [game.card.type.SWORD, game.card.type.STICK]},
+                {n: 7, t: [game.card.type.SWORD, game.card.type.GOLD]},
+                {n: 3, t: null},
+                {n: 2, t: null},
+                {n: 1, t: [game.card.type.CUP, game.card.type.GOLD]},
+                {n: 12, t: null},
+                {n: 11, t: null},
+                {n: 10, t: null},
+                {n: 7, t: [game.card.type.CUP, game.card.type.STICK]},
+                {n: 6, t: null},
+                {n: 5, t: null},
+                {n: 4, t: null}
+            ];
+
+            let cmporder = function(card, entry) {
+                if (entry.n === card.number) {
+                    if (entry.t !== null) {
+                        for (let i = 0; i < entry.t.length; i++) {
+                            if (entry.t[i] === card.type) {
+                                return true;
+                            }
+                        }
+                    } else {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            let findorder = function(card) {
+                for (let i = 0; i < order.length; i++) {
+                    let j = order.length - i - 1;
+
+                    if (cmporder(card, order[i])) return i;
+                    else if (cmporder(card, order[j])) return j;
+                }
+            }
+
+            let c1o = findorder(c1);
+            let c2o = findorder(c2);
+
+            return c2o - c1o;
+        },
         new: function(type, number) {
             let c = Object.create(this.s_card);
             c.type = type || this.type.DEFAULT;
@@ -151,14 +196,14 @@ var game = {
             this.clear(this.player);
         },
         fill: function (deck) {
-            for (let x = 1; x < Object.count(game.card.type); x++)
+            for (let x = 2; x < Object.count(game.card.type); x++)
                 for (let y = 1; y < 13; y++)
                     if (y !== 8 && y !== 9)
                         deck.push(game.card.new(Object.at(game.card.type, x), y));
         },
         shuffle: function(deck) {
             for (let i = 0; i < deck.length; i++) {
-                if (i < deck.length - 2) {
+                if (i < deck.length - 3) {
                     let ri = Math.randomRange(i + 1, deck.length - 1);
                     let c = deck[ri];
                     let lc = deck[i];
@@ -171,9 +216,22 @@ var game = {
     computer: {
         play: function() {
             let tc = game.deck.table[game.deck.table.length-1];
+            let lc = [];
 
-            for (let i = 0; i < game.deck.opponent; i++) {
+            for (let i = 0; i < game.deck.opponent.length; i++) {
+                let c = game.deck.opponent[i];
+
+                if (game.card.cmp(c, tc) > 0) {
+                    lc.push(i);
+                }
             }
+
+            let index = lc.pop();
+            let c = game.deck.opponent[index];
+            game.deck.opponent.splice(index, 1);
+            game.deck.table.push(c);
+            game.ui.render();
+            game.continue();
         }
     },
     player: {
