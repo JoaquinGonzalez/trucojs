@@ -16,6 +16,7 @@ Object.count = (o) => {
 };
 
 var game = {
+    counter: 0,
     current_state: undefined,
     state: {
         PLAYER_HAND: 0,
@@ -218,7 +219,24 @@ var game = {
             }
         }
     },
+    history: {
+        type: {
+            PUSH_CARD: 0,
+            TRUCO: 1,
+            QUIERO_RE_TRUCO: 2,
+            QUIRE_VALE_4: 3,
+            ENVIDO: 4,
+            REAL_ENVIDO: 5,
+            FALTA_ENVIDO: 6,
+            IR_AL_MAZO: 7
+        },
+        actions: [],
+        add: function(type, value) {
+            this.actions.push({type: type, value: value});
+        }
+    },
     computer: {
+        score: 0,
         play: function() {
             let tc = game.deck.table[game.deck.table.length-1];
             let lc = [];
@@ -226,26 +244,42 @@ var game = {
             for (let i = 0; i < game.deck.opponent.length; i++) {
                 let c = game.deck.opponent[i];
 
-                if (game.card.cmp(c, tc) > 0) {
+                if (game.card.cmp(c, tc) >= 0) {
                     lc.push(i);
                 }
             }
 
-            let index = lc.pop();
-            let c = game.deck.opponent[index];
-            c.owner = 1;
-            game.deck.opponent.splice(index, 1);
-            game.deck.table.push(c);
+            if (lc.length > 0) {
+                let low = lc[0];
+
+                for (let i = 1; i < lc.length; i++) {
+                    let c = game.deck.opponent[lc[i]];
+                    let lowc = game.deck.opponent[low];
+                    console.log(c, lowc);
+
+                    if (game.card.cmp(lowc, c) > 0)
+                        low = i;
+                }
+
+                let c = game.deck.opponent[low];
+                c.owner = 1;
+                game.deck.opponent.splice(low, 1);
+                game.deck.table.push(c);
+                game.history.add(game.history.type.PUSH_CARD, c);
+            }
+
             game.ui.render();
             game.continue();
         }
     },
     player: {
+        score: 0,
         playcard: function(i) {
             let c = game.deck.player[i];
             c.owner = 0;
             game.deck.player.splice(i, 1);
             game.deck.table.push(c);
+            game.history.add(game.history.type.PUSH_CARD, c);
             game.ui.render();
             game.continue();
         }
@@ -257,6 +291,8 @@ var game = {
         }
         else if(this.current_state === this.state.OPPONENT_HAND)
             this.current_state = this.state.PLAYER_HAND;
+
+        ++this.counter;
     },
     playhand: function() {
         this.current_state = this.state.PLAYER_HAND;
