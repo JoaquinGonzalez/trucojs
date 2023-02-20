@@ -85,8 +85,13 @@ var game = {
             }
 
             for (let i = 0; i < game.deck.table.length; i++) {
-                let c = this.card.createele(game.deck.table[i]);
-                this.elements.table_deck.append(c);
+                let c = game.deck.table[i];
+                let cele = this.card.createele(c);
+                let cls = "t";
+                if (c.owner == 1) cls += "o";
+                cls += i+1;
+                cele.setAttribute("class", cele.getAttribute("class") + " " + cls);
+                this.elements.table_deck.append(cele);
             }
         },
         clear: function() {
@@ -228,6 +233,7 @@ var game = {
 
             let index = lc.pop();
             let c = game.deck.opponent[index];
+            c.owner = 1;
             game.deck.opponent.splice(index, 1);
             game.deck.table.push(c);
             game.ui.render();
@@ -237,6 +243,7 @@ var game = {
     player: {
         playcard: function(i) {
             let c = game.deck.player[i];
+            c.owner = 0;
             game.deck.player.splice(i, 1);
             game.deck.table.push(c);
             game.ui.render();
