@@ -31,25 +31,45 @@ var game = {
         card: {
             createele(card) {
                 let ele = document.createElement('div');
+                let eleclass = "card card-";
 
                 switch (card.type) {
+                    case game.card.type.GOLD:
+                        eleclass += "gold";
+                        break;
+                    case game.card.type.CUP:
+                        eleclass += "cup";
+                        break;
+                    case game.card.type.SWORD:
+                        eleclass += "sword";
+                        break;
+                    case game.card.type.STICK:
+                        eleclass += "stick";
+                        break;
                     case game.card.type.DEFAULT:
-                        ele.setAttribute('class', 'card card-default');
+                        eleclass += "default";
                         break;
                 }
+
+                eleclass += " card-" + card.number;
+
+                ele.setAttribute("class", eleclass);
+                ele.addEventListener("click", game.card.events.click);
 
                 return ele;
             }
         },
         update: function() {
             for (let i = 0; i < game.deck.player.length; i++) {
-                let c = this.card.createele(game.card.new());
+                let c = this.card.createele(game.deck.player[i]);
+                c.setAttribute("index", i);
                 c.setAttribute('class', c.getAttribute('class') + ' c' + (i + 1));
                 this.elements.player_deck.append(c);
             }
 
             for (let i = 0; i < game.deck.opponent.length; i++) {
                 let c = this.card.createele(game.card.new());
+                c.setAttribute("index", i);
                 c.setAttribute('class', c.getAttribute('class') + ' c' + (i + 1));
                 this.elements.opponent_deck.append(c);
             }
@@ -83,6 +103,7 @@ var game = {
         },
         events: {
             click: function(e) {
+                console.log(game.deck.player[e.target.getAttribute("index")]);
             }
         },
         new: function(type, number) {
