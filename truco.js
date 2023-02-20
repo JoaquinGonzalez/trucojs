@@ -1,3 +1,4 @@
+'use strict';
 Math.randomRange = (min, max) => {
     return Math.floor((Math.random() * (max - min + 1)) + min);
 };
@@ -15,6 +16,11 @@ Object.count = (o) => {
 };
 
 var game = {
+    current_state: undefined,
+    state: {
+        PLAYER_HAND: 0,
+        OPPONENT_HAND: 1
+    },
     ui: {
         elements: {
             table_deck: undefined,
@@ -59,6 +65,10 @@ var game = {
                 return ele;
             }
         },
+        render: function() {
+            this.clear();
+            this.update();
+        },
         update: function() {
             for (let i = 0; i < game.deck.player.length; i++) {
                 let c = this.card.createele(game.deck.player[i]);
@@ -72,6 +82,11 @@ var game = {
                 c.setAttribute("index", i);
                 c.setAttribute('class', c.getAttribute('class') + ' c' + (i + 1));
                 this.elements.opponent_deck.append(c);
+            }
+
+            for (let i = 0; i < game.deck.table.length; i++) {
+                let c = this.card.createele(game.deck.table[i]);
+                this.elements.table_deck.append(c);
             }
         },
         clear: function() {
@@ -103,7 +118,10 @@ var game = {
         },
         events: {
             click: function(e) {
-                console.log(game.deck.player[e.target.getAttribute("index")]);
+                if (game.current_state == game.state.PLAYER_HAND) {
+                    let i = e.target.getAttribute("index");
+                    game.player.playcard(i);
+                }
             }
         },
         new: function(type, number) {
@@ -117,6 +135,7 @@ var game = {
         main: [],
         opponent: [],
         player: [],
+        table: [],
         clear: function(deck) {
             if (deck.pop() !== undefined) this.clear(deck);
         },
@@ -149,7 +168,33 @@ var game = {
             }
         }
     },
+    computer: {
+        play: function() {
+            let tc = game.deck.table[game.deck.table.length-1];
+
+            for (let i = 0; i < game.deck.opponent; i++) {
+            }
+        }
+    },
+    player: {
+        playcard: function(i) {
+            let c = game.deck.player[i];
+            game.deck.player.splice(i, 1);
+            game.deck.table.push(c);
+            game.ui.render();
+            game.continue();
+        }
+    },
+    continue: function() {
+        if (this.current_state === this.state.PLAYER_HAND) {
+            this.current_state = this.state.OPPONENT_HAND;
+            this.computer.play();
+        }
+        else if(this.current_state === this.state.OPPONENT_HAND)
+            this.current_state = this.state.PLAYER_HAND;
+    },
     playhand: function() {
+        this.current_state = this.state.PLAYER_HAND;
         this.deck.split();
         this.ui.update();
     },
