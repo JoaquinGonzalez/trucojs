@@ -80,7 +80,7 @@ var game = {
             for (let i = 0; i < game.deck.opponent.length; i++) {
                 let c = this.card.createele(game.card.new());
                 c.setAttribute("index", i);
-                c.setAttribute('class', c.getAttribute('class') + ' c' + (i + 1));
+                c.setAttribute('class', c.getAttribute('class') + ' co' + (i + 1));
                 this.elements.opponent_deck.append(c);
             }
 
