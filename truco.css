@@ -109,7 +109,7 @@ body {
 }
 
 .deck .co1 {
-    transform: rotate(-10deg) translate(-20px, -10px);
+    transform: rotate(10deg) translate(15px, -10px);
 }
 
 .deck .co2 {
@@ -117,7 +117,7 @@ body {
 }
 
 .deck .co3 {
-    transform: rotate(10deg) translate(20px, -10px);
+    transform: rotate(-10deg) translate(-15px, -10px);
 }
 
 .deck .c1 {
@@ -238,6 +238,7 @@ body {
     width: 521px;
     height: 105px;
     border: solid 1px black;
+    margin-top: 30px;
     margin-left: 25px !important;
     padding: 5px;
     border-radius: 6px;
