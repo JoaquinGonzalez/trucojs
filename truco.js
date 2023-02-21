@@ -255,10 +255,11 @@ var game = {
                 for (let i = 1; i < lc.length; i++) {
                     let c = game.deck.opponent[lc[i]];
                     let lowc = game.deck.opponent[low];
-                    console.log(c, lowc);
 
-                    if (game.card.cmp(lowc, c) > 0)
+                    if (game.card.cmp(lowc, c) > 0) {
                         low = i;
+                        lc.splice(i, 1);
+                    }
                 }
 
                 let c = game.deck.opponent[low];
@@ -266,6 +267,21 @@ var game = {
                 game.deck.opponent.splice(low, 1);
                 game.deck.table.push(c);
                 game.history.add(game.history.type.PUSH_CARD, c);
+
+                if (game.counter === 0) {
+                    let ac = game.deck.opponent[0];
+                    let bc = game.deck.opponent[1];
+
+                    if (game.card.cmp(bc, ac) > 0) {
+                        game.deck.opponent.splice(0, 1);
+                        ac.owner = 1;
+                        game.deck.table.push(ac);
+                    } else {
+                        game.deck.opponent.splice(1, 1);
+                        bc.owner = 1;
+                        game.deck.table.push(bc);
+                    }
+                }
             }
 
             game.ui.render();
