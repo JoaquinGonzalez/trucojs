@@ -240,12 +240,20 @@ var game = {
         play: function() {
             let tc = game.deck.table[game.deck.table.length-1];
             let lc = [];
+            let la = null;
 
             for (let i = 0; i < game.deck.opponent.length; i++) {
                 let c = game.deck.opponent[i];
 
                 if (game.card.cmp(c, tc) >= 0) {
                     lc.push(i);
+                }
+
+                if (la === null) la = i;
+                else {
+                    if (game.card.cmp(game.deck.opponent[la], c) < 0) {
+                        la = i;
+                    }
                 }
             }
 
@@ -282,6 +290,11 @@ var game = {
                         game.deck.table.push(bc);
                     }
                 }
+            } else {
+                let c = game.deck.opponent[la];
+                game.deck.opponent.splice(la, 1);
+                c.owner = 1;
+                game.deck.table.push(c);
             }
 
             game.ui.render();
