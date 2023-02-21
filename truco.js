@@ -161,6 +161,7 @@ var game = {
                 return false;
             };
 
+            // finds the card position in the order table and returns its position index
             let findorder = function(card) {
                 for (let i = 0; i < order.length; i++) {
                     let j = order.length - i - 1;
@@ -173,6 +174,9 @@ var game = {
             let c1o = findorder(c1);
             let c2o = findorder(c2);
 
+            // if the result is positive means that c1 is better than c2
+            // if the result is negative means that c1 is worst than c2
+            // if the result is 0 means that the cards are the same
             return c2o - c1o;
         },
         new: function(type, number) {
@@ -242,6 +246,7 @@ var game = {
             let lc = [];
             let la = null;
 
+            // find all the cards that beat player
             for (let i = 0; i < game.deck.opponent.length; i++) {
                 let c = game.deck.opponent[i];
 
@@ -249,9 +254,10 @@ var game = {
                     lc.push(i);
                 }
 
+                // we save the worst card if none of them are better than player
                 if (la === null) la = i;
                 else {
-                    if (game.card.cmp(game.deck.opponent[la], c) < 0) {
+                    if (game.card.cmp(c, game.deck.opponent[la]) < 0) {
                         la = i;
                     }
                 }
@@ -260,6 +266,7 @@ var game = {
             if (lc.length > 0) {
                 let low = lc[0];
 
+                // we look up for the worst card among the preselected that beat player card
                 for (let i = 1; i < lc.length; i++) {
                     let c = game.deck.opponent[lc[i]];
                     let lowc = game.deck.opponent[low];
@@ -276,6 +283,8 @@ var game = {
                 game.deck.table.push(c);
                 game.history.add(game.history.type.PUSH_CARD, c);
 
+                // if is the first hand we compare the last two remaining cards
+                // to check who is the worst card
                 if (game.counter === 0) {
                     let ac = game.deck.opponent[0];
                     let bc = game.deck.opponent[1];
@@ -290,7 +299,7 @@ var game = {
                         game.deck.table.push(bc);
                     }
                 }
-            } else {
+            } else { // if we dont have cards that beat player we push the saved one
                 let c = game.deck.opponent[la];
                 game.deck.opponent.splice(la, 1);
                 c.owner = 1;
