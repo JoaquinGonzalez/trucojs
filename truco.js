@@ -27,7 +27,17 @@ var game = {
             table_deck: undefined,
             player_deck: undefined,
             opponent_deck: undefined,
-            score: undefined
+            score: undefined,
+            buttons: {
+                truco: undefined,
+                qrtruco: undefined,
+                qv4: undefined,
+                quiero: undefined,
+                noquiero: undefined,
+                envido: undefined,
+                renvido: undefined,
+                fenvido: undefined
+            }
         },
         score: {
             ctx: undefined,
@@ -61,7 +71,6 @@ var game = {
                 eleclass += " card-" + card.number;
 
                 ele.setAttribute("class", eleclass);
-                ele.addEventListener("click", game.card.events.click);
 
                 return ele;
             }
@@ -75,6 +84,7 @@ var game = {
                 let c = this.card.createele(game.deck.player[i]);
                 c.setAttribute("index", i);
                 c.setAttribute('class', c.getAttribute('class') + ' c' + (i + 1));
+                c.addEventListener("click", game.card.events.click);
                 this.elements.player_deck.append(c);
             }
 
@@ -108,12 +118,39 @@ var game = {
             this.elements.player_deck = document.getElementById("player-deck");
             this.elements.opponent_deck = document.getElementById("opponent-deck");
             this.elements.score = document.getElementById("score");
+            this.elements.buttons.truco = document.getElementById("btn-truco");
+            this.elements.buttons.qrtruco = document.getElementById("btn-qrtruco");
+            this.elements.buttons.qv4 = document.getElementById("btn-qv4");
+            this.elements.buttons.quiero = document.getElementById("btn-quiero");
+            this.elements.buttons.noquiero = document.getElementById("btn-noquiero");
+            this.elements.buttons.envido = document.getElementById("btn-envido");
+            this.elements.buttons.renvido = document.getElementById("btn-renvido");
+            this.elements.buttons.fenvido = document.getElementById("btn-fenvido");
+
+            Object.keys(this.elements.buttons).forEach((k) => {
+                let ele = this.elements.buttons[k];
+                ele.addEventListener("click", game.player.events[k]);
+            });
         }
     },
     card: {
         s_card: {
             type: undefined,
-            number: undefined
+            number: undefined,
+            envidoval: function() {
+                switch (this.number) {
+                    case 1: return 1;
+                    case 7: return 7;
+                    case 3: return 3;
+                    case 2: return 2;
+                    case 12: return 0;
+                    case 11: return 0;
+                    case 10: return 0;
+                    case 6: return 6;
+                    case 5: return 5;
+                    case 4: return 4;
+                }
+            }
         },
         type: {
             DEFAULT: 0,
@@ -193,6 +230,57 @@ var game = {
         table: [],
         clear: function(deck) {
             if (deck.pop() !== undefined) this.clear(deck);
+        },
+        calcenvido: function(deck) {
+            let e = 0;
+            let l = [];
+
+            let top = function() {
+                return l[l.length - 1];
+            };
+
+            for (let i = 0; i < deck.length; i++) {
+                let c = deck[i];
+
+                if (i == 1) {
+                    if (deck[i-1].type == c.type) {
+                        l.push(deck[i-1]);
+                        l.push(c);
+                    }
+                }
+
+                if (i == 2) {
+                    if (l.length > 0) {
+                        if (deck[i-1].type == c.type) {
+                            if (deck[0].envidoval() < c.envidoval()) {
+                                l.splice(0, 1);
+                                l.push(c);
+                            } else if (deck[1].envidoval() < c.envidoval()) {
+                                l.splice(1, 1);
+                                l.push(c);
+                            }
+                        }
+                    } else {
+                        if (deck[0].type == c.type) {
+                            l.push(deck[0]);
+                            l.push(c);
+                        } else if (deck[1].type == c.type) {
+                            l.push(deck[1]);
+                            l.push(c);
+                        }
+                    }
+                }
+            }
+
+            if (l.length > 0) {
+                e = 20;
+
+                l.forEach((c) => {
+                    e += c.envidoval();
+                });
+            }
+
+            return e;
         },
         split: function() {
             for (let i = 0; i < 3; i++) {
@@ -312,6 +400,25 @@ var game = {
     },
     player: {
         score: 0,
+        events: {
+            truco: function(e) {
+            },
+            qrtruco: function(e) {
+            },
+            qv4: function(e) {
+            },
+            quiero: function(e) {
+            },
+            noquiero: function(e) {
+            },
+            envido: function(e) {
+                alert(game.deck.calcenvido(game.deck.player));
+            },
+            renvido: function(e) {
+            },
+            fenvido: function(e) {
+            }
+        },
         playcard: function(i) {
             let c = game.deck.player[i];
             c.owner = 0;
